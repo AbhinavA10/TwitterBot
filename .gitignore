@@ -1,9 +1,7 @@
-# For projects that use the Waf build system: https://waf.io/
-# Dot-hidden on Unix-like systems
-.waf-*-*/
-.waf3-*-*/
-# Hidden directory on Windows (no dot)
-waf-*-*/
-waf3-*-*/
-# Lockfile
-.lock-waf_*_build
+#ignore these folders
+node_modules/puppeteer/
+
+
+#ignore these files
+config.js
+TwitbotLogin.txt

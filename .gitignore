@@ -3,5 +3,4 @@ node_modules/puppeteer/
 
 
 #ignore these files
-config.js
 TwitbotLogin.txt

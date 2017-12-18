@@ -1,23 +1,12 @@
-//TODO remove (with pictures) - wikihow from scraped title
-
 // This bot includes replies to users, and posting random wikihow titles
 
 /* The following are the sources I used to learn about webscraping with Puppeteer
-https://yogendra.me/2017/10/28/puppeteer-no-strings-attached/\
+
 https://github.com/GoogleChrome/puppeteer
 https://medium.com/@e_mad_ehsan/getting-started-with-puppeteer-and-chrome-headless-for-web-scrapping-6bf5979dee3e
-*/
+https://yogendra.me/2017/10/28/puppeteer-no-strings-attached/
 
-/*
-There are three types of events in Twitter / Twit API
-get -> one time search
-post -> posting a tweetI
-stream -> continious connection to twitter
-  3 types of streams
-    user -> event tied to a particular user (ex. me)
-    public -> anything on twitter (ex. someone tweets with the #, #rainbows)
-    site -> ??
-
+Other general Sites
 https://developer.twitter.com/en/docs
 http://shiffman.net
 */
@@ -71,6 +60,7 @@ function tweetIt(txt) {
   }
 
   T.post('statuses/update', tweet, tweeted);
+
   function tweeted(err, data, response) {
     if (err) {
       console.log("Something went wrong!");
@@ -79,16 +69,21 @@ function tweetIt(txt) {
     }
   };
 };
-//---------------------SCRAPING WIKIHOW WEBPAGE FOR TITLE-------
+//---------------------SCRAPING WIKIHOW WEBPAGE FOR TITLE-----------------------
 let scrape = async () => {
   const browser = await puppeteer.launch({
-    headless: false // default is true
+    headless: true // default is true. To see in action, make false
   });
   const page = await browser.newPage();
   await page.goto('http://www.wikihow.com/Special:Randomizer');
   const result = await page.evaluate(() => {
     let title = document.querySelector('title').innerText;
     // the title of the wikihow page is in the html tag : head->title
+    title = title.replace(/wikiHow/gi, '');
+    title = title.replace(/ - /gi, '');
+    title = title.replace(/ (with Pictures)/gi, '');
+    // by splitting up the above 3 lines, all types of titles are corrected
+    // For example, not all titles necessarily say "(with Pictures)"
     return title
   });
   await browser.close();
@@ -101,6 +96,6 @@ function tweetTitle() {
     console.log(title);
   });
 }
-/// --------------------------RUN-----
-tweetTitle();
+/// --------------------------RUN-----------------------------------------------
+tweetTitle(); // run once, to make sure it works when deployed from heroku
 setInterval(tweetTitle, 1000 * 60 * 60); // 1 hour

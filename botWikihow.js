@@ -72,7 +72,8 @@ function tweetIt(txt) {
 //---------------------SCRAPING WIKIHOW WEBPAGE FOR TITLE-----------------------
 let scrape = async () => {
   const browser = await puppeteer.launch({
-    headless: true // default is true. To see in action, make false
+    //headless: true // default is true. To see in action, make false
+    args: ['--no-sandbox', '--disable-setuid-sandbox'] // comment line out if testing. this line only needed for heroku
   });
   const page = await browser.newPage();
   await page.goto('http://www.wikihow.com/Special:Randomizer');

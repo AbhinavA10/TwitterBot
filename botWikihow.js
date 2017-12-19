@@ -1,3 +1,7 @@
+//TODO clean up
+//TODO add proper naming
+//TODO handle promise rejection
+
 // This bot includes replies to users, and posting random wikihow titles
 
 /* The following are the sources I used to learn about webscraping with Puppeteer
@@ -82,8 +86,11 @@ let scrape = async () => {
     // the title of the wikihow page is in the html tag : head->title
     title = title.replace(/wikiHow/gi, '');
     title = title.replace(/ - /gi, '');
-    title = title.replace(/ (with Pictures)/gi, '');
-    // by splitting up the above 3 lines, all types of titles are corrected
+    title = title.replace(/ \(with Pictures\)/gi, ''); //regex rules: \ means escaped character, g means global, i means case insensitive
+    title = title.replace(/ Steps/gi, '');
+    title = title.replace(/\: [1-9][0-9]/gi, '');
+    title = title.replace(/\: [0-9]/gi, '');
+    // by splitting up the above regex lines, all types of titles are corrected
     // For example, not all titles necessarily say "(with Pictures)"
     return title
   });
@@ -93,10 +100,72 @@ let scrape = async () => {
 
 function tweetTitle() {
   scrape().then((title) => {
-    tweetIt(title)
     console.log(title);
+    tweetPic(title)
   });
 }
+// --------------------------SCRAPE IMAGE-------------------------------------
+var nNumImage = 0;
+// the title of the wikihow page is in the html tag : head->title
+async function scrapeImage() {
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    //headless: false // default is true
+  });
+  const page = await browser.newPage();
+
+  // Navigate to this blog post and wait a bit.
+  await page.goto('http://www.wikihow.com/Special:Randomizer');
+  const imgName = '#steps_1 > ol > li:nth-child(1) > div.mwimg.largeimage.floatcenter > a > div > img';
+  await page.waitForSelector(imgName);
+  // Select the first image element and save the screenshot.
+  page.setViewport({
+    width: 900, // dimensions of the first wikihow image on every(?) page
+    height: 675
+    // or 728 x 546 for some files on Wikihow (of format Webp)
+  });
+  const wikiImage = await page.$(imgName);
+  await wikiImage.screenshot({
+    path: 'savedWikiImages/wiki' + nNumImage + '.png',
+    omitBackground: true,
+  });
+  await browser.close();
+  nNumImage++;
+};
+// --------------------------TWEET PICTURE-------------------------------------
+var fs = require('fs');
+
+function tweetPic(title2) {
+  var wikiTitle = title2;
+  scrapeImage();
+  console.log('Scraped Image success');
+  var filename = 'savedWikiImages/wiki' + nNumImage + '.png';
+  var params = {
+    encoding: 'base64'
+  }
+  var b64 = fs.readFileSync(filename, params);
+  //need to upload media to twitter first, then tweet
+  T.post('media/upload', {
+    media_data: b64
+  }, uploaded);
+
+  function uploaded(err, data, response) {
+    var id = data.media_id_string;
+    var tweet = {
+      status: wikiTitle,
+      media_ids: [id]
+    }
+    T.post('statuses/update', tweet, tweeted);
+  }
+
+  function tweeted(err, data, response) {
+    if (err) {
+      console.log("Something went wwrong!");
+    } else {
+      console.log("It worked!");
+    }
+  }
+};
 /// --------------------------RUN-----------------------------------------------
 tweetTitle(); // run once, to make sure it works when deployed from heroku
-setInterval(tweetTitle, 1000 * 60 * 60); // 1 hour
+setInterval(tweetTitle, 1000 * 60 * 60 * 2); // reduced to 2 hours to save dyno hours

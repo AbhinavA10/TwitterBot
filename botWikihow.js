@@ -1,4 +1,4 @@
-//TODO clean up
+//TODO figure out why basic image is needed, and why saving starts at '1'
 //TODO add proper naming
 //TODO handle promise rejection
 
@@ -14,14 +14,16 @@ Other general Sites
 https://developer.twitter.com/en/docs
 http://shiffman.net
 */
-console.log("running");
-const Twit = require('twit');
+console.log("Starting up bot");
 const puppeteer = require('puppeteer');
-var config = require('./config');
+const config = require('./config');
+const fs = require('fs');
+const Twit = require('twit');
 var T = new Twit(config);
 
 // set up user stream
 var stream = T.stream('user');
+var nNumImage = 0;
 
 //-------------------- REPLY TWEET ------------------
 stream.on('tweet', tweetEvent);
@@ -97,15 +99,18 @@ let scrape = async () => {
   await browser.close();
   return result;
 };
-
-function tweetTitle() {
+// --------------------------COMBINED TWEET FUNCTION--------------------------
+function tweetWikiHow() {
   scrape().then((title) => {
-    console.log(title);
-    tweetPic(title)
+    console.log('Found article called ' + title);
+    scrapeImage();
+    console.log('Completed Scraped Image');
+    tweetPic(title);
+    nNumImage++;
+    console.log('added to nNumImage');
   });
 }
 // --------------------------SCRAPE IMAGE-------------------------------------
-var nNumImage = 0;
 // the title of the wikihow page is in the html tag : head->title
 async function scrapeImage() {
   const browser = await puppeteer.launch({
@@ -130,15 +135,10 @@ async function scrapeImage() {
     omitBackground: true,
   });
   await browser.close();
-  nNumImage++;
 };
 // --------------------------TWEET PICTURE-------------------------------------
-var fs = require('fs');
-
 function tweetPic(title2) {
   var wikiTitle = title2;
-  scrapeImage();
-  console.log('Scraped Image success');
   var filename = 'savedWikiImages/wiki' + nNumImage + '.png';
   var params = {
     encoding: 'base64'
@@ -155,17 +155,19 @@ function tweetPic(title2) {
       status: wikiTitle,
       media_ids: [id]
     }
+    console.log("Upload of image worked");
     T.post('statuses/update', tweet, tweeted);
   }
 
   function tweeted(err, data, response) {
     if (err) {
-      console.log("Something went wwrong!");
+      console.log("Something went completely wrong!");
     } else {
-      console.log("It worked!");
+      console.log("Complete tweet worked!");
     }
   }
 };
 /// --------------------------RUN-----------------------------------------------
-tweetTitle(); // run once, to make sure it works when deployed from heroku
-setInterval(tweetTitle, 1000 * 60 * 60 * 2); // reduced to 2 hours to save dyno hours
+var timeinHours = 0.5;
+tweetWikiHow(); // run once, to make sure it works when deployed from heroku
+setInterval(tweetWikiHow, 1000 * 60 * 60 * timeinHours); // reduced to 2 hours to save dyno hours

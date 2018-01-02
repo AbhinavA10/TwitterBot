@@ -168,6 +168,6 @@ function tweetPic(title2) {
   }
 };
 /// --------------------------RUN-----------------------------------------------
-var timeinHours = 0.5;
+var timeinHours = 1.5;
 tweetWikiHow(); // run once, to make sure it works when deployed from heroku
 setInterval(tweetWikiHow, 1000 * 60 * 60 * timeinHours); // reduced to 2 hours to save dyno hours

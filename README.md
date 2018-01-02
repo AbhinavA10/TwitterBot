@@ -1,7 +1,7 @@
 # TwitterBot
 This is a twitter bot I created, based off of Daniel Shiffman's Node.js and twitterbot tutorials. This app is hosted and run off Heroku.
 
-You can see the current tweets here: https://twitter.com/ro_bot_testing
+You can see the current tweets here: [@ro_bot_testing on twitter](https://twitter.com/ro_bot_testing)
 
 ## To Install Puppeteer API
 Before running this code: use `npm i --save puppeteer` in command line.
@@ -30,6 +30,7 @@ Installs dependencies needed in order to run puppeteer on Heroku. This can be do
 Be sure to include `{ args: ['--no-sandbox', '--disable-setuid-sandbox'] }` in your call to `puppeteer.launch()`
 
 Side Note: for Debugging Puppeteer, in `puppeteer.launch()`, add `{headless: false}` to be able to see what it is doing. ex. opening up GoogleChrome.
+
 ----
 ## Sources
 I used the following websites to create this TwitterBot

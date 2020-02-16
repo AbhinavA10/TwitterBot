@@ -3,9 +3,20 @@ This is a twitter bot I created, based off of Daniel Shiffman's Node.js and twit
 
 You can see the current tweets here: [@ro_bot_testing on twitter](https://twitter.com/ro_bot_testing)
 
+You can see the current tweets here: [@LoverWikihow](https://twitter.com/LoverWikihow)
+
+You will need to create your own Twitter account, and supply the credentials in `config.js`. 
+
 ## To Install Puppeteer API
 Before running this code: use `npm i --save puppeteer` in command line.
 
+
+## Getting Access Token
+- make a twitter account
+- login to dev.twitter.com
+- go to https://developer.twitter.com/en/apps
+- create a new app
+- click on keys and access tokens when done
 ----
 ## Twit API Notes
 
@@ -39,8 +50,9 @@ Side Note: for Debugging Puppeteer, in `puppeteer.launch()`, add `{headless: fal
 I used the following websites to create this TwitterBot
 
 ### Twitter Side
-- [Daniel Shiffman's Website and Tutorials](http://shiffman.net)
+- [Daniel Shiffman's Twitterbot tutorials](https://www.youtube.com/playlist?list=PLRqwX-V7Uu6atTSxoRiVnSuOn6JHnq2yV)
 - [Twitter Developer Docs](https://developer.twitter.com/en/docs)
+- [Twitter API Client for node](https://github.com/ttezel/twit)
 
 ### Webscraping with Puppeteer
 - [The Puppeteer API](https://github.com/GoogleChrome/puppeteer)

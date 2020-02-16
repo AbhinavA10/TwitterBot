@@ -19,15 +19,18 @@ There are three types of events in Twitter / Twit API
 
 ----
 ## Heroku Notes
-Installing the CLI is not necessary to running code off of Heroku. You can also deploy directly from Github, which is what I did.
+Installing the CLI is not necessary to running code off of Heroku. You can also deploy directly from Github.
 
 Heroku gives a free account 550 dyno hours, and puts apps to sleep 30 mins after inactivity. [Source](https://devcenter.heroku.com/articles/free-dyno-hours)
 To check free dyno hours left: `heroku ps -a <app name>`
 
 ### Implementing Puppeteer in Heroku
-Installs dependencies needed in order to run puppeteer on Heroku. This can be done by going to the Settings page of the Heroku app and adding a buildpack, or running `heroku buildpacks:add https://github.com/jontewks/puppeteer-heroku-buildpack.git`
+Installs dependencies needed in order to run puppeteer on Heroku. This can be done by going to the Settings page of the Heroku app and adding a buildpack, or running 
+```
+heroku buildpacks:add https://github.com/jontewks/puppeteer-heroku-buildpack.git
+```
 
-Be sure to include `{ args: ['--no-sandbox', '--disable-setuid-sandbox'] }` in your call to `puppeteer.launch()`
+Include `{ args: ['--no-sandbox', '--disable-setuid-sandbox'] }` in call to `puppeteer.launch()`
 
 Side Note: for Debugging Puppeteer, in `puppeteer.launch()`, add `{headless: false}` to be able to see what it is doing. ex. opening up GoogleChrome.
 
@@ -52,3 +55,32 @@ I used the following websites to create this TwitterBot
 - [Running Headless Chrom on Heroku](https://timleland.com/headless-chrome-on-heroku/)
 - [Puppeteer-heroku-buildpack on Github](https://github.com/jontewks/puppeteer-heroku-buildpack)
 - [Deploying Puppeteer on Heroku](https://github.com/GoogleChrome/puppeteer/issues/758)
+
+To deploy to heroku: 
+```
+heroku create
+heroku buildpacks:add heroku/nodejs
+heroku buildpacks:add https://github.com/jontewks/puppeteer-heroku-buildpack.git
+git push heroku master
+```
+
+Creating twitterbot-puppeteer... done
+https://twitterbot-puppeteer.herokuapp.com/ | https://git.heroku.com/twitterbot-puppeteer.git
+
+
+To run the app locally: 
+```
+heroku local
+```
+To view logs:
+```
+heroku logs
+```
+To shutdown the heroku app:
+```
+heroku ps:scale web=0
+```
+
+
+
+TODO: update puppeteer version

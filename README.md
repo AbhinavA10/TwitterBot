@@ -3,13 +3,10 @@ This is a twitter bot I created, based off of Daniel Shiffman's Node.js and twit
 
 You can see the current tweets here: [@ro_bot_testing on twitter](https://twitter.com/ro_bot_testing)
 
-You can see the current tweets here: [@LoverWikihow](https://twitter.com/LoverWikihow)
-
 You will need to create your own Twitter account, and supply the credentials in `config.js`. 
 
-## To Install Puppeteer API
-Before running this code: use `npm i --save puppeteer` in command line.
-
+## To Install
+Before running this code: use `npm install` in command line.
 
 ## Getting Access Token
 - make a twitter account
@@ -92,7 +89,3 @@ To shutdown the heroku app:
 ```
 heroku ps:scale web=0
 ```
-
-
-
-TODO: update puppeteer version

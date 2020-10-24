@@ -1,14 +1,14 @@
 {
-  "name": "npm_demo",
+  "name": "twitter-bot",
   "version": "1.0.0",
-  "description": "demonstatratin",
-  "main": "bot.js",
+  "description": "Twitterbot that tweets random images and titles from WikiHow",
+  "main": "botWikihow.js",
   "scripts": {
     "start": "node botWikihow.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "puppeteer": "^0.13.0",
     "twit": "^2.2.9"

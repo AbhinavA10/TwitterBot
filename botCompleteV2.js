@@ -1,10 +1,8 @@
-//As complete as this bot seems to be, it isn't actually
-// A problem with this, is that it doesn't filter content of what it retweets. 
 /*
 three types of things
 get -> one time search
 post -> posting a tweetI
-stream -> continious connection to twitter
+stream -> continuous connection to twitter
 3 types of streams
 user -> event tied to a particular user (ex. me)
 public -> anything on twitter (ex. someone tweets with the #, #rainbows)
@@ -36,9 +34,9 @@ function tweetEvent(eventMsg) {
     var replyText = '@' + from + ' '; //reply to sender
     var regexQuestion = /\?/;
     if (regexQuestion.test(txt)) {
-      replyText = replyText + 'idk, what do you think...';
+      replyText = replyText + 'IDK, what do you think?';
     } else {
-      replyText = replyText + 'haha true';
+      replyText = replyText + 'Haha, true!';
     }
     T.post('statuses/update', { //post a reply tweet as a conversation
       status: replyText,
@@ -53,7 +51,7 @@ function followEvent(eventMsg) {
   console.log("follow event");
   var name = eventMsg.source.name;
   var screenName = eventMsg.source.screen_name;
-  tweetIt('@' + screenName + " Why would you follow me?");
+  tweetIt('@' + screenName + " Thanks for following me!");
 };
 //--------------------BASIC TWEET------------------
 function tweetIt(txt) {
@@ -89,6 +87,7 @@ function gotTweet(tweet) {
   // Twitter docs states "Exact matching of phrases is not supported."
   if (regex.test(tweet.text)) {
     console.log('Adding to queue ' + tweet.id_str);
+    //TODO: filter content of safe retweets. 
     // Save this tweet for the queue
     queue.push(tweet.id_str);
   }
